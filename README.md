@@ -7,6 +7,18 @@ This project provides a simple API endpoint to check the health status of the ap
 - Node.js (version 12 or higher)
 - MySQL server (version 5.7 or higher recommended)
 
+## Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/your-repo-name.git
+   cd your-repo-name
+
+2. Install the required dependencies:
+    npm install
+
+3. Create a .env file in the root of the project and add your database credentials.
+
 ## Usage
 
     Set up your MySQL database:
