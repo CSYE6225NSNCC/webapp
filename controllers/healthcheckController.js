@@ -1,8 +1,9 @@
+
 const healthcheckService = require('../services/healthcheckService.js');
 
 const getStatusController = async (req, res) => {
     // Check for payload
-    if (req.method === 'GET' && req.headers['content-length'] > 0) {
+    if (req.method === 'GET' && ((req.headers['content-length'] > 0)|| Object.keys(req.query).length > 0)) {
         res.set('Cache-Control', 'no-cache'); // No caching
         return res.status(400).send(); // 400 Bad Request
     }
