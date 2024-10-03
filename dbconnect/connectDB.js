@@ -1,28 +1,26 @@
-import mysql from "mysql";
-import dotenv from "dotenv";
+// connectDB.js
+const { Sequelize } = require('sequelize');
+const dotenv = require('dotenv') ;
 
-dotenv.config(); // Load environment variables from.env file
+dotenv.config();
 
-const pool = mysql.createPool({
-    connectionLimit: 10,
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  dialect: 'mysql',
 });
 
-const connectDB = () => {
-    return new Promise((resolve, reject) => {
-        pool.getConnection((err, connection) => {
-            if (err) {
-                console.error("Error connecting to the database", err);
-                return reject(err);
-            }
-            console.log(`Connected to ${connection.config.host}`);
-            connection.release(); // Release the connection back to the pool
-            resolve();
-        });
-    });
+const connectDB = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+    throw error; // Rethrow the error for handling in the controller
+  }
 };
 
-export default connectDB;
+// export default { connectDB, sequelize };
+module.exports = {
+    sequelize,
+    connectDB,
+};
