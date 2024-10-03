@@ -1,16 +1,16 @@
-import connectDB from '../dbconnect/connectDB.js';
+const healthcheckService = require('../services/healthcheckService.js');
 
 const getStatusController = async (req, res) => {
     // Check for payload
-    if (req.method == 'GET' && req.headers['content-length'] > 0) {
+    if (req.method === 'GET' && req.headers['content-length'] > 0) {
         res.set('Cache-Control', 'no-cache'); // No caching
         return res.status(400).send(); // 400 Bad Request
     }
     if (req.method !== 'GET') {
-      return res.status(405).send(); // For any request other than GET
+        return res.status(405).send(); // For any request other than GET
     }
     try {
-        await connectDB(); // Just ensure DB is connected
+        await healthcheckService.checkDBConnection(); // Ensure DB is connected
         res.set('Cache-Control', 'no-cache'); // No caching
         return res.status(200).send(); // 200 OK
     } catch (error) {
@@ -20,4 +20,4 @@ const getStatusController = async (req, res) => {
     }
 };
 
-export default getStatusController;
+module.exports= getStatusController;
