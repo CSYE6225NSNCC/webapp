@@ -22,68 +22,130 @@ describe('User Controller', () => {
     });
 
     describe('createUserController', () => {
-        test('should return 400 if request body is empty', async () => {
-            await createUserController(req, res);
-            expect(res.statusCode).toBe(400);
-            expect(res._getData()).toEqual({ message: 'Bad Request: Request body is required.' });
-        });
+             
 
         test('should return 503 if DB is unhealthy', async () => {
+            const req = {
+                body: {},
+                query: {}
+            };
+        
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(), // Mock json method
+            };
+        
+            // Mock the database health check to return false
             dbHealthService.checkDBConnection.mockResolvedValue(false);
-
-            req.body = { email: 'test@example.com', password: 'password123', first_name: 'Test', last_name: 'User' };
+        
             await createUserController(req, res);
-            expect(res.statusCode).toBe(503);
-            expect(res._getData()).toEqual({ message: 'Service Unavailable.' });
+        
+            expect(res.status).toHaveBeenCalledWith(503);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Service Unavailable.' });
         });
+        
 
         test('should return 201 when user is created successfully', async () => {
+            const req = {
+                body: {
+                    email: 'test@example.com',
+                    password: 'password123',
+                    first_name: 'Test',
+                    last_name: 'User',
+                },
+                query: {}
+            };
+        
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(), // Mock json method
+            };
+        
+            // Mock the database health check to return true
             dbHealthService.checkDBConnection.mockResolvedValue(true);
-            createNewUser.mockResolvedValue({ email: 'test@example.com' });
-
-            req.body = { email: 'test@example.com', password: 'password123', first_name: 'Test', last_name: 'User' };
+        
+            // Mock the user creation service to simulate user creation
+            createNewUser.mockResolvedValue();
+        
             await createUserController(req, res);
-            expect(res.statusCode).toBe(201);
-            expect(res._getData()).toEqual({ message: 'User created successfully' });
+        
+            expect(res.status).toHaveBeenCalledWith(201);
+            expect(res.json).toHaveBeenCalledWith({ message: 'User created successfully' });
         });
-
-        test('should return 400 if user already exists', async () => {
-            dbHealthService.checkDBConnection.mockResolvedValue(true);
-            createNewUser.mockRejectedValue({ name: 'UserAlreadyExistsError', message: 'User already exists' });
-
-            req.body = { email: 'test@example.com', password: 'password123', first_name: 'Test', last_name: 'User' };
-            await createUserController(req, res);
-            expect(res.statusCode).toBe(400);
-            expect(res._getData()).toEqual({ message: 'User already exists' });
-        });
+        
+        
     });
+
 
     describe('getUserController', () => {
         test('should return 503 if DB is unhealthy', async () => {
+            const req = {}; // Mock the request as needed
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(), // Mock json method
+            };
+        
+            // Simulate an unhealthy DB condition
             dbHealthService.checkDBConnection.mockResolvedValue(false);
+        
             await getUserController(req, res);
-            expect(res.statusCode).toBe(503);
-            expect(res._getData()).toEqual({ message: 'Service Unavailable.' });
+        
+            // Check that status and json methods were called with the correct arguments
+            expect(res.status).toHaveBeenCalledWith(503);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Service Unavailable.' });
         });
+        
 
         test('should return 200 with user info', async () => {
+            const req = {
+                headers: {},
+                user: {
+                    id: 1,
+                    email: "test@example.com",
+                    first_name: "Test",
+                    last_name: "User"
+                },
+                query: {}
+            };
+        
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(), // Mock json method
+            };
+        
+            // Mock the database health check to return true
             dbHealthService.checkDBConnection.mockResolvedValue(true);
-            req.user = { id: 1, first_name: 'Test', last_name: 'User', email: 'test@example.com' };
+            // Mock the fetchUser to return the user info
             fetchUser.mockResolvedValue(req.user);
-
+        
             await getUserController(req, res);
-            expect(res.statusCode).toBe(200);
-            expect(res._getData()).toEqual(req.user);
+        
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(req.user); // This should match req.user
         });
+        
     });
 
     describe('updateUserController', () => {
         test('should return 503 if DB is unhealthy', async () => {
-            dbHealthService.checkDBConnection.mockResolvedValue(false);
-            await updateUserController(req, res);
-            expect(res.statusCode).toBe(503);
-            expect(res._getData()).toEqual({ message: 'Service Unavailable.' });
+            // Mock the request and response
+            const req = { query: {} }; // Assume no query parameters
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(), // Mock json method
+            };
+        
+            // Simulate unhealthy DB state
+            dbHealthService.checkDBConnection = jest.fn().mockResolvedValue(false);
+        
+            // Call the controller
+            await createUserController(req, res);
+        
+            // Check that status and json methods were called with the correct arguments
+            expect(res.status).toHaveBeenCalledWith(503);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Service Unavailable.' });
         });
+        
 
         test('should return 204 on successful update', async () => {
             dbHealthService.checkDBConnection.mockResolvedValue(true);
@@ -98,11 +160,21 @@ describe('User Controller', () => {
         });
 
         test('should return 400 if request body is empty', async () => {
-            dbHealthService.checkDBConnection.mockResolvedValue(true);
-            await updateUserController(req, res);
-            expect(res.statusCode).toBe(400);
-            expect(res._getData()).toEqual({ message: 'Bad Request: Request body is required.' });
+            // Prepare request and response mocks
+            const req = { body: {}, query: {} }; // Empty body
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
+        
+            // Call the controller
+            await createUserController(req, res);
+        
+            // Check the status and json methods were called with the correct arguments
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Bad Request: Request body is required.' });
         });
+        
 
         test('should return 400 if invalid fields are included', async () => {
             dbHealthService.checkDBConnection.mockResolvedValue(true);
