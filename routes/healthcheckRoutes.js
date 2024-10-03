@@ -1,5 +1,5 @@
-import getStatusController from "../controllers/healthcheckController.js";
-import express from "express";
+const getStatusController =require("../controllers/healthcheckController.js") ;
+const express =require("express");
 
 const router = express.Router();
 
@@ -7,4 +7,4 @@ const router = express.Router();
 router.get("/", getStatusController);
 router.all("/", getStatusController)
 
-export default router;
+module.exports= router;
