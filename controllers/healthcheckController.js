@@ -15,7 +15,7 @@ const getStatusController = async (req, res) => {
         res.set('Cache-Control', 'no-cache'); // No caching
         return res.status(200).send(); // 200 OK
     } catch (error) {
-        console.error('Database connection failed:', error);
+        //console.error('Database connection failed:', error);
         res.set('Cache-Control', 'no-cache'); // No caching
         return res.status(503).send(); // 503 Service Unavailable
     }

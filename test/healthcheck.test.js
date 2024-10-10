@@ -42,4 +42,5 @@ describe('Health Check Controller', () => {
         await getStatusController(req, res);
         expect(res.statusCode).toBe(200); // Expect 200 OK
     });
+
 });
