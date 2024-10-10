@@ -73,6 +73,10 @@ describe('User Controller', () => {
             expect(res.json).toHaveBeenCalledWith({ message: 'User created successfully' });
         });
         
+        // New failing test case
+        test('this test will fail', () => {
+            expect(true).toBe(false); // This will always fail
+        });
         
     });
 
