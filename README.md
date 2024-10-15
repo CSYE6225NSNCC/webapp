@@ -15,7 +15,7 @@ This project provides an API to check the health status of the application and m
     Testing
     License
 
-# Prerequisites
+# Prerequisitessss
 
     Node.js (version 12 or higher)
     MySQL server (version 5.7 or higher recommended)
