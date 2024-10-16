@@ -16,23 +16,25 @@ jobs:
     - name: Install Packer
       run: |
         sudo apt-get update
-        sudo apt-get install -y unzip
+        sudo apt-get install -y unzip zip
         wget https://releases.hashicorp.com/packer/1.11.2/packer_1.11.2_linux_amd64.zip
         unzip packer_1.11.2_linux_amd64.zip
         sudo mv packer /usr/local/bin/
         rm packer_1.11.2_linux_amd64.zip
 
-    - name: Create artifact application
-      run: zip -r webapp.zip ./*  # Adjust this if you want to zip a specific directory
+    - name: List files in the repository
+      run: ls -al
 
+    - name: Print current working directory
+      run: pwd
+
+    - name: Create webapp.zip artifact
+      run: |
+        echo "Attempting to zip files..."
+        zip -r webapp.zip ./*
+        
     - name: Verify zip content
       run: zip -l webapp.zip
-
-    - name: Upload application artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: webapp-artifact
-        path: webapp.zip  # Path to the zip file created
 
     - name: Initialize Packer
       run: packer init aws.pkr.hcl
