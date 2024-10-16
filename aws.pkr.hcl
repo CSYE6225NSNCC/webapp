@@ -48,6 +48,25 @@ variable "ssh_username" {
   type        = string
 }
 
+variable "db_host"{
+  description = "Database host"
+  type        = string
+}
+
+variable "db_name"{
+  description = "Database name"
+  type        = string
+}
+
+variable "db_password"{
+  description = "Database password"
+  type        = string
+}
+
+variable "db_user"{
+  description = "Database user"
+  type        = string
+}
 source "amazon-ebs" "ubuntu" {
   region           = var.aws_region
   source_ami       = var.aws_source_ami // Replace with the official Ubuntu 24.04 AMI ID
