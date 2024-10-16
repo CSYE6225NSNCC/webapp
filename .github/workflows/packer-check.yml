@@ -46,7 +46,10 @@ jobs:
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         DB_NAME: ${{ secrets.DB_NAME }}
         SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-      run: |  
+      run: |
+        touch test.txt
+        zip webapp.zip test.txt
+      
         packer validate \
             -var "aws_region=$AWS_REGION" \
             -var "aws_source_ami=$AWS_SOURCE_AMI" \
