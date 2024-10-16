@@ -23,13 +23,13 @@ jobs:
         rm packer_1.11.2_linux_amd64.zip
 
     - name: Create artifact application
-      run: zip -r webapp.zip   # Adjust this if you want to zip a specific directory
+      run: zip -r webapp.zip ./*  # Adjust this if you want to zip a specific directory
 
     - name: Verify zip content
       run: zip -l webapp.zip
 
     - name: Upload application artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: webapp-artifact
         path: webapp.zip  # Path to the zip file created
