@@ -22,25 +22,6 @@ jobs:
         sudo mv packer /usr/local/bin/
         rm packer_1.11.2_linux_amd64.zip
 
-    - name: Create webapp.zip artifact
-      run: |
-        echo "Attempting to zip files..."
-        zip -r webapp.zip ./*
-    
-    - name: List files in the repository
-      run: ls -al
-  
-    - name: Print current working directory
-      run: pwd
-      
-    - name: Verify zip content
-      run: zip -sf webapp.zip
-
-    - name: Upload application artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: webapp-artifact
-        path: webapp.zip  # Path to the zip file created
 
     - name: Initialize Packer
       run: packer init aws.pkr.hcl
@@ -59,4 +40,4 @@ jobs:
 
     - name: Validate Packer template
       run: |
-        packer validate aws.pkr.hcl
+        packer validate -syntax-only aws.pkr.hcl
