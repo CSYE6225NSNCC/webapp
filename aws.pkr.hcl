@@ -38,11 +38,41 @@ variable "volume_type" {
   default     = "gp2" // General Purpose SSD (gp2), provisioned IOPS (io1), etc.
 }
 
+variable "aws_source_ami" {
+  description = "Source AMI ID for the builder"
+  type        = string
+}
+
+variable "ssh_username" {
+  description = "SSH username for the instance"
+  type        = string
+}
+
+variable "db_host" {
+  description = "Database host"
+  type        = string
+}
+
+variable "db_name" {
+  description = "Database name"
+  type        = string
+}
+
+variable "db_password" {
+  description = "Database password"
+  type        = string
+}
+
+variable "db_user" {
+  description = "Database user"
+  type        = string
+}
+
 source "amazon-ebs" "ubuntu" {
   region           = var.aws_region
-  source_ami       = "ami-0866a3c8686eaeeba" // Replace with the official Ubuntu 24.04 AMI ID
+  source_ami       = var.aws_source_ami // Replace with the official Ubuntu 24.04 AMI ID
   instance_type    = var.instance_type
-  ssh_username     = "ubuntu"
+  ssh_username     = var.ssh_username
   ami_name         = var.ami_name
   ssh_wait_timeout = "10m"
   ami_description  = "Custom Ubuntu 24.04 image with Java, Tomcat, and MySQL"

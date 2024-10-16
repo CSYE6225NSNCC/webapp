@@ -23,11 +23,12 @@ jobs:
 
       - name: Create .env file
         run: |
-         .env
-          DB_USER=${{ secrets.DB_USER }}
-          DB_HOST=${{ secrets.DB_HOST }}
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-          PORT=${{ secrets.PORT}}
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+
 
       - name: Create artifact application
         run: zip -r webapp.zip ./*  # Adjust this if you want to zip a specific directory
@@ -54,7 +55,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1  # Adjust as needed
+          aws-region: ${{ secrets.AWS_REGION }}  # Adjust as needed
 
       - name: Download artifact
         uses: actions/download-artifact@v2
@@ -70,7 +71,7 @@ jobs:
     
       - name: Initialize Packer
         run: |
-          packer init ./packer/aws.pkr.hcl
+          packer init aws.pkr.hcl
 
       - name: Build Packer Image
         env:
