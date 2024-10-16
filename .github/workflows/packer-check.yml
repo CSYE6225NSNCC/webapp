@@ -40,4 +40,7 @@ jobs:
 
     - name: Validate Packer template
       run: |
-        packer validate -syntax-only aws.pkr.hcl
+        touch test.txt
+        zip webapp.zip test.txt
+        
+        packer validate aws.pkr.hcl
