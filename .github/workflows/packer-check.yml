@@ -22,7 +22,6 @@ jobs:
         sudo mv packer /usr/local/bin/
         rm packer_1.11.2_linux_amd64.zip
 
-
     - name: Initialize Packer
       run: packer init aws.pkr.hcl
 
@@ -40,18 +39,22 @@ jobs:
 
     - name: Validate Packer template
       env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          AWS_SOURCE_AMI: ${{ secrets.AWS_SOURCE_AMI }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_SOURCE_AMI: ${{ secrets.AWS_SOURCE_AMI }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_NAME: ${{ secrets.DB_NAME }}
+        SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
       run: |
-        touch test.txt
-        zip webapp.zip test.txt
-
+        echo "AWS_REGION: $AWS_REGION"
+        echo "AWS_SOURCE_AMI: $AWS_SOURCE_AMI"
+        echo "DB_HOST: $DB_HOST"
+        echo "DB_USER: $DB_USER"
+        echo "DB_PASSWORD: $DB_PASSWORD"
+        echo "DB_NAME: $DB_NAME"
+        echo "SSH_USERNAME: $SSH_USERNAME"
+      
         packer validate \
             -var "aws_region=$AWS_REGION" \
             -var "aws_source_ami=$AWS_SOURCE_AMI" \
@@ -59,5 +62,5 @@ jobs:
             -var "db_user=$DB_USER" \
             -var "db_password=$DB_PASSWORD" \
             -var "db_name=$DB_NAME" \
-            -var "ssh_username=$SSH_USERNAME"
+            -var "ssh_username=$SSH_USERNAME" \
             aws.pkr.hcl
