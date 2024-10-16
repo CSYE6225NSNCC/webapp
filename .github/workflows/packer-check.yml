@@ -46,15 +46,7 @@ jobs:
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         DB_NAME: ${{ secrets.DB_NAME }}
         SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-      run: |
-        echo "AWS_REGION: $AWS_REGION"
-        echo "AWS_SOURCE_AMI: $AWS_SOURCE_AMI"
-        echo "DB_HOST: $DB_HOST"
-        echo "DB_USER: $DB_USER"
-        echo "DB_PASSWORD: $DB_PASSWORD"
-        echo "DB_NAME: $DB_NAME"
-        echo "SSH_USERNAME: $SSH_USERNAME"
-      
+      run: |  
         packer validate \
             -var "aws_region=$AWS_REGION" \
             -var "aws_source_ami=$AWS_SOURCE_AMI" \
