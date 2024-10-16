@@ -13,10 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install Packer
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y packer
+    - name: Set up Packer
+      uses: hashicorp/setup-packer@v1
+      with:
+        version: '1.11.2'  # Specify the version you need
 
     - name: Initialize Packer
       run: packer init aws.pkr.hcl
