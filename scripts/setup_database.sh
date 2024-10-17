@@ -1,12 +1,5 @@
 #!/bin/bash
-
-# Install MySQL Server
-sudo apt-get update
-sudo apt-get install -y mysql-server
-
-# Secure MySQL installation
-# Note: You may want to customize these commands as per your requirements
-sudo mysql_secure_installation 
+ 
 
 
 
