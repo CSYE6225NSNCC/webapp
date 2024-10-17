@@ -96,7 +96,7 @@ source "amazon-ebs" "ubuntu" {
     delete_on_termination = true
     volume_type           = var.volume_type
   }
-  ami_user = ["${var.demo_account_id}"]
+  ami_users = ["${var.demo_account_id}"]
 }
 
 build {
