@@ -34,7 +34,7 @@ jobs:
         run: zip -r webapp.zip ./*  # Adjust this if you want to zip a specific directory
 
       - name: Verify zip content
-        run: zip -l webapp.zip
+        run: unzip -l webapp.zip
 
       - name: Upload application artifact
         uses: actions/upload-artifact@v3
