@@ -110,8 +110,8 @@ build {
 
   provisioner "shell" {
     inline = [
-      "cd/tmp",
-      "unzip -o webapp.zip -d/tmp/webapp"
+      "cd /tmp",
+      "unzip -o webapp.zip -d /tmp/webapp"
     ]
   }
 
