@@ -1,6 +1,6 @@
 const express = require('express');
 const {createUserController, updateUserController, getUserController} = require('../controllers/userController');
-const {authenticateUser} = require("../authentication/basicauth.js") ;
+const {authenticateUser} = require("../authentication/basicAuth.js") ;
 
 const router = express.Router();
 

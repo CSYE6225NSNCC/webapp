@@ -68,6 +68,11 @@ variable "db_user" {
   type        = string
 }
 
+variable "demo_account_id" {
+  description = "AWS account ID for demo purposes"
+  type        = number
+}
+
 source "amazon-ebs" "ubuntu" {
   region           = var.aws_region
   source_ami       = var.aws_source_ami // Replace with the official Ubuntu 24.04 AMI ID
@@ -91,6 +96,7 @@ source "amazon-ebs" "ubuntu" {
     delete_on_termination = true
     volume_type           = var.volume_type
   }
+  ami_user = ["${var.demo_account_id}"]
 }
 
 build {

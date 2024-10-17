@@ -18,7 +18,11 @@ const createNewUser = async ({ email, password, first_name, last_name }) => {
     if (existingUser) {
         throw new UserAlreadyExistsError('User already exists');
     }
-
+    // Password validation: at least 8 characters, one uppercase, one special character
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    if (!passwordRegex.test(password)) {
+        throw new UserInputError('BadRequest: Invalid password.');
+    }
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
