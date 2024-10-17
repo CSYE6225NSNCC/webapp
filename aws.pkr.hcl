@@ -109,15 +109,14 @@ build {
   }
 
   provisioner "shell" {
+    script = "scripts/install.sh"
+  }
+
+  provisioner "shell" {
     inline = [
       "cd /tmp",
       "unzip -o webapp.zip -d /tmp/webapp"
     ]
-  }
-
-
-  provisioner "shell" {
-    script = "scripts/install.sh"
   }
 
   provisioner "shell" {
