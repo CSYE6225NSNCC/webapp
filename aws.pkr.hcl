@@ -113,10 +113,22 @@ build {
   }
 
   provisioner "shell" {
+    environment_vars = [
+      "DB_USER=${var.db_user}",
+      "DB_PASSWORD=${var.db_password}",
+      "DB_NAME=${var.db_name}",
+      "DB_HOST=${var.db_host}"
+    ]
     script = "scripts/setup_database.sh"
   }
 
   provisioner "shell" {
+    environment_vars = [
+      "DB_USER=${var.db_user}",
+      "DB_PASSWORD=${var.db_password}",
+      "DB_NAME=${var.db_name}",
+      "DB_HOST=${var.db_host}"
+    ]
     script = "scripts/webapp.sh"
   }
 
