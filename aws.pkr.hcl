@@ -109,6 +109,14 @@ build {
   }
 
   provisioner "shell" {
+    inline = [
+      "cd/tmp",
+      "unzip -o webapp.zip -d/tmp/webapp"
+    ]
+  }
+
+
+  provisioner "shell" {
     script = "scripts/install.sh"
   }
 
@@ -130,13 +138,6 @@ build {
       "DB_HOST=${var.db_host}"
     ]
     script = "scripts/webapp.sh"
-  }
-
-  provisioner "shell" {
-    inline = [
-      "cd/tmp",
-      "unzip -o webapp.zip -d/tmp/webapp"
-    ]
   }
 
   post-processor "manifest" {
