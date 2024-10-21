@@ -12,7 +12,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 app.use("/healthz",healthcheckRoutes); 
-app.use("/v1/user",userRoutes);
+app.use("/v2/user",userRoutes);
 
 
 // Start the server
