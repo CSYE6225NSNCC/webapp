@@ -41,17 +41,13 @@ jobs:
       env:
         AWS_REGION: ${{ secrets.AWS_REGION }}
         AWS_SOURCE_AMI: ${{ secrets.AWS_SOURCE_AMI }}
-        
         SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
         
       run: |
         touch test.txt
         zip webapp.zip test.txt
-      
         packer validate \
             -var "aws_region=$AWS_REGION" \
             -var "aws_source_ami=$AWS_SOURCE_AMI" \
-            
             -var "ssh_username=$SSH_USERNAME" \
-            
             aws.pkr.hcl
