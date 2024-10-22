@@ -41,12 +41,9 @@ jobs:
       env:
         AWS_REGION: ${{ secrets.AWS_REGION }}
         AWS_SOURCE_AMI: ${{ secrets.AWS_SOURCE_AMI }}
-        DB_HOST: ${{ secrets.DB_HOST }}
-        DB_USER: ${{ secrets.DB_USER }}
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        DB_NAME: ${{ secrets.DB_NAME }}
+        
         SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-        DEMO_ACCOUNT_ID: ${{ secrets.DEMO_ACCOUNT_ID}}
+        
       run: |
         touch test.txt
         zip webapp.zip test.txt
@@ -54,10 +51,7 @@ jobs:
         packer validate \
             -var "aws_region=$AWS_REGION" \
             -var "aws_source_ami=$AWS_SOURCE_AMI" \
-            -var "db_host=$DB_HOST" \
-            -var "db_user=$DB_USER" \
-            -var "db_password=$DB_PASSWORD" \
-            -var "db_name=$DB_NAME" \
+            
             -var "ssh_username=$SSH_USERNAME" \
-            -var "demo_account_id=$DEMO_ACCOUNT_ID" \
+            
             aws.pkr.hcl

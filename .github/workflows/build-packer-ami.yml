@@ -23,10 +23,7 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          
           echo "PORT=${{ secrets.PORT }}" >> .env
 
       - name: Create artifact application
@@ -72,11 +69,7 @@ jobs:
           packer init aws.pkr.hcl
 
       - name: Build Packer Image
-        env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        
 
         run: |
           packer build \
@@ -87,9 +80,5 @@ jobs:
             -var "ami_name=${{ secrets.AMI_NAME }}" \
             -var "volume_size=${{ secrets.VOLUME_SIZE }}" \
             -var "volume_type=${{ secrets.VOLUME_TYPE }}" \
-            -var "db_host=${{ secrets.DB_HOST }}" \
-            -var "db_name=${{ secrets.DB_NAME }}" \
-            -var "db_user=${{ secrets.DB_USER }}" \
-            -var "db_password=${{ secrets.DB_PASSWORD }}" \
-            -var "demo_account_id=${{ secrets.DEMO_ACCOUNT_ID }}" \
+            
             aws.pkr.hcl
