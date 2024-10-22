@@ -21,34 +21,33 @@ else
 fi
 
 # Create environment variable file for the web application
-sudo bash -c "cat <<EOF > /etc/webapp.env
-DB_HOST='${DB_HOST}'
-DB_NAME='${DB_NAME}'
-DB_USER='${DB_USER}'
-DB_PASSWORD='${DB_PASSWORD}'
-EOF"
+# sudo bash -c "cat <<EOF > /etc/webapp.env
+# DB_HOST='${DB_HOST}'
+# DB_NAME='${DB_NAME}'
+# DB_USER='${DB_USER}'
+# DB_PASSWORD='${DB_PASSWORD}'
+# EOF"
 
-sudo chmod 600 /etc/webapp.env
-sudo chown root:root /etc/webapp.env
+# sudo chmod 600 /etc/webapp.env
+# sudo chown root:root /etc/webapp.env
 
 # Create directory /app if not exists
-sudo mkdir -p /app
-sudo chown csye6225:csye6225 /app
+# sudo mkdir -p /app
+# sudo chown csye6225:csye6225 /app
 
 # Reload systemd and enable/start the service
-sudo systemctl daemon-reload
+# sudo systemctl daemon-reload
 
-if sudo systemctl enable webapp.service; then
-    echo "Service enabled successfully."
-else
-    echo "Failed to enable webapp.service. Exiting."
-    exit 1
-fi
+# if sudo systemctl enable webapp.service; then
+#    echo "Service enabled successfully."
+# else
+#    echo "Failed to enable webapp.service. Exiting."
+#    exit 1
+# fi
 
-if sudo systemctl start webapp.service; then
-    echo "Service started successfully."
-else
-    echo "Failed to start webapp.service. Exiting."
-    e
-xit 1
-fi
+# if sudo systemctl start webapp.service; then
+#    echo "Service started successfully."
+# else
+#    echo "Failed to start webapp.service. Exiting."
+#    exit 1
+# fi
