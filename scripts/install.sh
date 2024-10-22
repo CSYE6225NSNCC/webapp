@@ -6,7 +6,7 @@ sudo apt-get update -y
 
 
 # Install MySQL Server
-sudo apt-get install -y mysql-server nodejs npm unzip
+sudo apt-get install -y nodejs npm unzip
 
 # # Enable and start MySQL
 # sudo systemctl enable mysql
