@@ -69,8 +69,6 @@ jobs:
           packer init aws.pkr.hcl
 
       - name: Build Packer Image
-        
-
         run: |
           packer build \
             -var "aws_region=${{ secrets.AWS_REGION }}" \
@@ -80,5 +78,4 @@ jobs:
             -var "ami_name=${{ secrets.AMI_NAME }}" \
             -var "volume_size=${{ secrets.VOLUME_SIZE }}" \
             -var "volume_type=${{ secrets.VOLUME_TYPE }}" \
-            
             aws.pkr.hcl
