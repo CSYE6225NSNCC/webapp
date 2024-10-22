@@ -1,6 +1,5 @@
 sudo mkdir -p /opt/webapp
 sudo cp -r /tmp/webapp/. /opt/webapp/
-sudo chown -R csye6225:csye6225 /opt/webapp
 
 # Change directory to webapp and install npm dependencies
 cd /opt/webapp
