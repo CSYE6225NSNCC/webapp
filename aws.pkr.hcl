@@ -96,7 +96,7 @@ source "amazon-ebs" "ubuntu" {
     delete_on_termination = true
     volume_type           = var.volume_type
   }
-//  ami_users = ["${var.demo_account_id}"]
+  //  ami_users = ["${var.demo_account_id}"]
 }
 
 build {
@@ -136,12 +136,12 @@ build {
   //}
 
   provisioner "shell" {
-  //  environment_vars = [
-  //    "DB_USER=${var.db_user}",
-  //    "DB_PASSWORD=${var.db_password}",
-  //    "DB_NAME=${var.db_name}",
-  //    "DB_HOST=${var.db_host}"
-  //  ]
+    //  environment_vars = [
+    //    "DB_USER=${var.db_user}",
+    //    "DB_PASSWORD=${var.db_password}",
+    //    "DB_NAME=${var.db_name}",
+    //    "DB_HOST=${var.db_host}"
+    //  ]
     script = "scripts/webapp.sh"
   }
 
