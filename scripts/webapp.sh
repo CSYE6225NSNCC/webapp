@@ -1,5 +1,11 @@
+# Create the user and group csye6225 if they don't exist
+sudo groupadd -f csye6225
+sudo id -u csye6225 &>/dev/null || sudo useradd -m -g csye6225 -s /usr/sbin/nologin csye6225
+
+
 sudo mkdir -p /opt/webapp
 sudo cp -r /tmp/webapp/. /opt/webapp/
+sudo chown -R csye6225:csye6225 /opt/webapp
 
 # Change directory to webapp and install npm dependencies
 cd /opt/webapp
