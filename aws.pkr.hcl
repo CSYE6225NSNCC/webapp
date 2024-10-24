@@ -109,7 +109,7 @@ provisioner "shell" {
   provisioner "shell" {
     inline = [
       "sudo mkdir -p /tmp/webapp/",
-      "sudo chmod 775 /tmp/webapp"
+      "sudo chmod 775 /tmp/webapp",
       "sudo chown -R csye6225:csye6225 /opt/webapp"
     ]
   }
