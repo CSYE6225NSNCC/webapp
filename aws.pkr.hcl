@@ -110,7 +110,7 @@ build {
     inline = [
       "sudo mkdir -p /tmp/webapp/",
       "sudo chmod 775 /tmp/webapp",
-      "sudo chown -R csye6225:csye6225 /opt/webapp"
+      "sudo chown -R csye6225:csye6225 /tmp/webapp"
     ]
   }
 
@@ -123,7 +123,8 @@ build {
   provisioner "shell" {
     inline = [
       "cd /tmp",
-      "unzip -o webapp.zip -d /tmp/webapp"
+      "unzip -o webapp.zip -d /tmp/webapp",
+      "sudo chown -R csye6225:csye6225 /tmp/webapp"
     ]
   }
 
