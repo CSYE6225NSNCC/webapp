@@ -123,28 +123,12 @@ build {
   provisioner "shell" {
     inline = [
       "cd /tmp",
-      "unzip -o webapp.zip -d /tmp/webapp",
+      "sudo unzip -o webapp.zip -d /tmp/webapp",
       "sudo chown -R csye6225:csye6225 /tmp/webapp"
     ]
   }
 
-  //provisioner "shell" {
-  //  environment_vars = [
-  //    "DB_USER=${var.db_user}",
-  //    "DB_PASSWORD=${var.db_password}",
-  //    "DB_NAME=${var.db_name}",
-  //    "DB_HOST=${var.db_host}"
-  //  ]
-  //  script = "scripts/setup_database.sh"
-  //}
-
   provisioner "shell" {
-    //  environment_vars = [
-    //    "DB_USER=${var.db_user}",
-    //    "DB_PASSWORD=${var.db_password}",
-    //    "DB_NAME=${var.db_name}",
-    //    "DB_HOST=${var.db_host}"
-    //  ]
     script = "scripts/webapp.sh"
   }
 
