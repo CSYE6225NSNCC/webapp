@@ -103,9 +103,14 @@ build {
   sources = ["source.amazon-ebs.ubuntu"]
 
   provisioner "shell" {
+    script = "scripts/install.sh"
+  }
+
+  provisioner "shell" {
     inline = [
       "sudo mkdir -p /tmp/webapp/",
-      "sudo chmod 777 /tmp/webapp"
+      "sudo chmod 775 /tmp/webapp",
+      "sudo chown -R csye6225:csye6225 /opt/webapp"
     ]
   }
 
@@ -114,9 +119,6 @@ build {
     destination = "/tmp/webapp.zip"
   }
 
-  provisioner "shell" {
-    script = "scripts/install.sh"
-  }
 
   provisioner "shell" {
     inline = [
