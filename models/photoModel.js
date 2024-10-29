@@ -8,10 +8,6 @@ const Photo = sequelize.define('Photo', {
         primaryKey: true,
         allowNull: false,
     },
-    data: {
-        type: DataTypes.STRING, // Change from BLOB to STRING for URL
-        allowNull: false,
-    },
     contentType: {
         type: DataTypes.STRING,
         allowNull: false,
