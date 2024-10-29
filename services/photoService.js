@@ -26,7 +26,6 @@ const uploadOrUpdateProfilePictureService = async (userId, photoFile) => {
     } else {
         // Create a new Photo instance
         const photo = await Photo.create({
-            data: null, // Not needed for S3
             contentType: photoFile.mimetype,
             uploadedBy: userId,
             s3Key: `${userId}/${photoFile.originalname}`, // Store the S3 key in the database
