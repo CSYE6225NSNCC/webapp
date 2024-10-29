@@ -104,6 +104,9 @@ build {
 
   provisioner "shell" {
     script = "scripts/install.sh"
+    environment = {
+      AWS_REGION = var.aws_region
+    }
   }
 
   provisioner "shell" {
