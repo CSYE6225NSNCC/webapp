@@ -1,6 +1,7 @@
 const express =require("express") ;
 const healthcheckRoutes = require("./routes/healthcheckRoutes.js");
 const userRoutes = require("./routes/userRoutes.js");
+const photoRoutes = require("./routes/photoRoutes.js");
 
 const { connectDB, sequelize } = require("./dbconnect/connectDB.js");
 
@@ -13,6 +14,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use("/healthz",healthcheckRoutes); 
 app.use("/v1/user",userRoutes);
+app.use("/v1/user/self/pic", photoRoutes);
 
 
 // Start the server
