@@ -103,10 +103,10 @@ build {
   sources = ["source.amazon-ebs.ubuntu"]
 
   provisioner "shell" {
+    environment_vars = [
+      "AWS_REGION = ${var.aws_region}"
+    ]
     script = "scripts/install.sh"
-    environment = {
-      AWS_REGION = var.aws_region
-    }
   }
 
   provisioner "shell" {
