@@ -1,11 +1,11 @@
 const AWS = require('aws-sdk');
-const  Photo  = require('../models/photoModel.js'); 
+const Image = require('../models/photoModel.js'); // Update to use the new Image model
 
 const s3 = new AWS.S3();
 
 const uploadOrUpdateProfilePictureService = async (userId, photoFile) => {
     // Check if the user already has a profile picture
-    const existingPhoto = await Photo.findOne({where: { uploadedBy: userId }});
+    const existingPhoto = await Image.findOne({ where: { user_id: userId } });
 
     const params = {
         Bucket: process.env.S3_BUCKET_NAME,
@@ -15,35 +15,36 @@ const uploadOrUpdateProfilePictureService = async (userId, photoFile) => {
     };
 
     if (existingPhoto) {
-        throw new Error('Photo already exists');
+        throw new Error("Photo already exists");
     } else {
-        // Create a new Photo instance
-        const photo = await Photo.create({
-            contentType: photoFile.mimetype,
-            uploadedBy: userId,
-            s3Key: `${userId}/${photoFile.originalname}`, // Store the S3 key in the database
+        // Create a new Image instance
+        await s3.upload(params).promise(); // Upload the new photo
+        const photo = await Image.create({
+            file_name: photoFile.originalname,
+            url: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${params.Key}`, // Store the URL in the database
+            upload_date: new Date(), // Set the upload date
+            user_id: userId,
         });
-        await s3.putObject(params).promise();
         return photo; // Return the saved photo object
     }
 };
 
 const getProfilePictureService = async (userId) => {
-    const photo = await Photo.findOne({
-        where: { uploadedBy: userId },
+    const photo = await Image.findOne({
+        where: { user_id: userId },
     });
     return photo; // Return the photo object or null if not found
 };
 
 const deleteProfilePictureService = async (userId) => {
-    const photo = await Photo.findOne({
-        where: { uploadedBy: userId },
+    const photo = await Image.findOne({
+        where: { user_id: userId },
     });
 
     if (photo) {
         const params = {
             Bucket: process.env.S3_BUCKET_NAME,
-            Key: photo.s3Key,
+            Key: photo.url.split('/').pop(), // Get the key from the URL
         };
         await s3.deleteObject(params).promise(); // Delete the photo from S3
         await photo.destroy(); // Delete the photo from the database

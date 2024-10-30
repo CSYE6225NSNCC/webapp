@@ -15,10 +15,10 @@ const uploadProfilePicture = async (req, res) => {
 
         const photo = await uploadOrUpdateProfilePictureService(userId, photoFile);
         const response = {
-            file_name: photoFile.originalname, // Original file name
+            file_name: photo.file_name, // Use the updated field name
             id: photo.id, // Assuming photo.id is the UUID generated
-            url: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${photo.s3Key}`, // Construct the URL
-            upload_date: new Date().toISOString().split('T')[0], // Format the date as 'YYYY-MM-DD'
+            url: photo.url, // Use the URL generated in the service
+            upload_date: photo.upload_date.toISOString().split('T')[0], // Format the date as 'YYYY-MM-DD'
             user_id: userId // The ID of the user who uploaded the photo
         };
         return res.status(201).json(response);
@@ -37,10 +37,10 @@ const getProfilePicture = async (req, res) => {
             return res.status(404).json({ error: "Profile picture not found" });
         }
 
-        // Return the photo URL
+        // Return the photo URL and other relevant information
         const response = {
-            url: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${photo.s3Key}`,
-            contentType: photo.contentType,
+            url: photo.url, // Use the URL generated in the service
+            contentType: photo.contentType, // Update to match your model
             user_id: userId
         };
         return res.status(200).json(response);
