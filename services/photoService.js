@@ -1,8 +1,9 @@
 const AWS = require('aws-sdk');
-const Image = require('../models/photoModel.js'); // Update to use the new Image model
+const Image = require('../models/photoModel.js');
 const StatsD = require('node-statsd');
 const client = new StatsD();
 
+const cloudwatch = new AWS.CloudWatch();
 const s3 = new AWS.S3();
 
 const uploadOrUpdateProfilePictureService = async (userId, photoFile) => {
@@ -14,7 +15,7 @@ const uploadOrUpdateProfilePictureService = async (userId, photoFile) => {
 
         const params = {
             Bucket: process.env.S3_BUCKET_NAME,
-            Key: `${userId}/${photoFile.originalname}`, // Use userId as part of the S3 key for organization
+            Key: `${userId}/${photoFile.originalname}`,
             Body: photoFile.buffer,
             ContentType: photoFile.mimetype,
         };
@@ -26,14 +27,30 @@ const uploadOrUpdateProfilePictureService = async (userId, photoFile) => {
             await s3.upload(params).promise();
             const photo = await Image.create({
                 file_name: photoFile.originalname,
-                url: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${params.Key}`, // Store the URL in the database
-                upload_date: new Date(), // Set the upload date
+                url: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${params.Key}`,
+                upload_date: new Date(),
                 user_id: userId,
             });
-            return photo; // Return the saved photo object
+            return photo;
         }
     } finally {
-        client.timing('photo_upload_time', Date.now() - start); // Send a timing metric for the upload time
+        const duration = Date.now() - start;
+        client.timing('photo_upload_time', duration);
+        
+        // Send metrics to CloudWatch
+        await cloudwatch.putMetricData({
+            MetricData: [
+                {
+                    MetricName: 'PhotoUploadTime',
+                    Dimensions: [
+                        { Name: 'UserId', Value: userId }
+                    ],
+                    Unit: 'Milliseconds',
+                    Value: duration,
+                }
+            ],
+            Namespace: 'webapp'
+        }).promise();
     }
 };
 
@@ -44,9 +61,25 @@ const getProfilePictureService = async (userId) => {
         const photo = await Image.findOne({
             where: { user_id: userId },
         });
-        return photo; // Return the photo object or null if not found
+        return photo;
     } finally {
-        client.timing('photo_retrieve_time', Date.now() - start); // Send a timing metric for the retrieval time
+        const duration = Date.now() - start;
+        client.timing('photo_retrieve_time', duration);
+        
+        // Send metrics to CloudWatch
+        await cloudwatch.putMetricData({
+            MetricData: [
+                {
+                    MetricName: 'PhotoRetrieveTime',
+                    Dimensions: [
+                        { Name: 'UserId', Value: userId }
+                    ],
+                    Unit: 'Milliseconds',
+                    Value: duration,
+                }
+            ],
+            Namespace: 'webapp'
+        }).promise();
     }
 };
 
@@ -61,15 +94,31 @@ const deleteProfilePictureService = async (userId) => {
         if (photo) {
             const params = {
                 Bucket: process.env.S3_BUCKET_NAME,
-                Key: photo.url.split('/').pop(), // Get the key from the URL
+                Key: photo.url.split('/').pop(),
             };
-            await s3.deleteObject(params).promise(); // Delete the photo from S3
-            await photo.destroy(); // Delete the photo from the database
+            await s3.deleteObject(params).promise();
+            await photo.destroy();
         } else {
             throw new Error("Profile picture not found");
         }
     } finally {
-        client.timing('photo_delete_time', Date.now() - start); // Send a timing metric for the deletion time
+        const duration = Date.now() - start;
+        client.timing('photo_delete_time', duration);
+        
+        // Send metrics to CloudWatch
+        await cloudwatch.putMetricData({
+            MetricData: [
+                {
+                    MetricName: 'PhotoDeleteTime',
+                    Dimensions: [
+                        { Name: 'UserId', Value: userId }
+                    ],
+                    Unit: 'Milliseconds',
+                    Value: duration,
+                }
+            ],
+            Namespace: 'webapp'
+        }).promise();
     }
 };
 

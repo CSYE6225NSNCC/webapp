@@ -1,13 +1,16 @@
-
 const bcrypt = require('bcrypt');
-const User =require ('../models/userModel.js');
+const AWS = require('aws-sdk');
+const User = require('../models/userModel.js');
 const {
     UserAlreadyExistsError,
     UserInputError
-}=require( "../errors/userErrors.js");
+} = require("../errors/userErrors.js");
 
+const cloudwatch = new AWS.CloudWatch();
 
 const createNewUser = async ({ email, password, first_name, last_name }) => {
+    const start = Date.now();
+
     // Check if the input data is provided
     if (!email || !password || !first_name || !last_name) {
         throw new UserInputError('Bad Request: All fields are required.');
@@ -18,11 +21,13 @@ const createNewUser = async ({ email, password, first_name, last_name }) => {
     if (existingUser) {
         throw new UserAlreadyExistsError('User already exists');
     }
+
     // Password validation: at least 8 characters, one uppercase, one special character
     const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
     if (!passwordRegex.test(password)) {
         throw new UserInputError('BadRequest: Invalid password.');
     }
+
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -36,11 +41,30 @@ const createNewUser = async ({ email, password, first_name, last_name }) => {
         account_updated: new Date(),
     });
 
+    const duration = Date.now() - start;
+
+    // Send metrics to CloudWatch
+    await cloudwatch.putMetricData({
+        MetricData: [
+            {
+                MetricName: 'UserCreationTime',
+                Dimensions: [
+                    { Name: 'Operation', Value: 'CreateUser' }
+                ],
+                Unit: 'Milliseconds',
+                Value: duration,
+            }
+        ],
+        Namespace: 'webapp' // Change this to your app's namespace
+    }).promise();
+
     return newUser;
 };
 
 // API to update user information
 const updateUser = async (user, { first_name, last_name, password }) => {
+    const start = Date.now();
+
     // Check if the input data is valid
     if (!first_name && !last_name && !password) {
         throw new Error('Bad Request: At least one field is required for update.');
@@ -55,13 +79,32 @@ const updateUser = async (user, { first_name, last_name, password }) => {
 
     // Update user in the database
     await user.update(updatedData);
+
+    const duration = Date.now() - start;
+
+    // Send metrics to CloudWatch
+    await cloudwatch.putMetricData({
+        MetricData: [
+            {
+                MetricName: 'UserUpdateTime',
+                Dimensions: [
+                    { Name: 'Operation', Value: 'UpdateUser' }
+                ],
+                Unit: 'Milliseconds',
+                Value: duration,
+            }
+        ],
+        Namespace: 'webapp' // Change this to your app's namespace
+    }).promise();
+
     return user;
 };
 
-
-// Api to fetch user information
+// API to fetch user information
 const fetchUser = async (user) => {
-    return {
+    const start = Date.now();
+
+    const userData = {
         id: user.id,
         first_name: user.first_name,
         last_name: user.last_name,
@@ -69,6 +112,25 @@ const fetchUser = async (user) => {
         account_created: user.account_created,
         account_updated: user.account_updated,
     };
+
+    const duration = Date.now() - start;
+
+    // Send metrics to CloudWatch
+    await cloudwatch.putMetricData({
+        MetricData: [
+            {
+                MetricName: 'UserFetchTime',
+                Dimensions: [
+                    { Name: 'Operation', Value: 'FetchUser' }
+                ],
+                Unit: 'Milliseconds',
+                Value: duration,
+            }
+        ],
+        Namespace: 'webapp' // Change this to your app's namespace
+    }).promise();
+
+    return userData;
 };
 
-module.exports ={createNewUser, updateUser, fetchUser}
+module.exports = { createNewUser, updateUser, fetchUser };

@@ -2,6 +2,7 @@ const express =require("express") ;
 const healthcheckRoutes = require("./routes/healthcheckRoutes.js");
 const userRoutes = require("./routes/userRoutes.js");
 const photoRoutes = require("./routes/photoRoutes.js");
+const logMetrics = require('./middleware/metricsLogger.js'); // Import the metrics logger
 
 const { connectDB, sequelize } = require("./dbconnect/connectDB.js");
 
@@ -9,6 +10,9 @@ const { connectDB, sequelize } = require("./dbconnect/connectDB.js");
 const app = express();
 
 app.use(express.json());
+
+// Apply metrics logger middleware globally
+app.use(logMetrics);
 
 const PORT = process.env.PORT || 3000;
 
