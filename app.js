@@ -4,6 +4,8 @@ const userRoutes = require("./routes/userRoutes.js");
 const photoRoutes = require("./routes/photoRoutes.js");
 const logMetrics = require('./middleware/metricsLogger.js'); // Import the metrics logger
 
+const multer = require('multer'); // Multer for handling file uploads
+
 const { connectDB, sequelize } = require("./dbconnect/connectDB.js");
 
 
@@ -27,6 +29,9 @@ app.use((err, req, res, next) => {
         return res.status(400).json({ message: err.message }); // Handle multer-specific errors
     }
     if (err) {
+        if(err.message.includes("File type not allowed")){
+            return res.status(400).json({message:err.message});
+        }
         return res.status(500).json({ message: "An unexpected error occurred." });
     }
     next(); // Pass the error to the next middleware if it's not handled

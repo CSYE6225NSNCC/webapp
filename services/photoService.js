@@ -51,7 +51,7 @@ const uploadOrUpdateProfilePictureService = async (userId, photoFile) => {
                 {
                     MetricName: 'PhotoUploadTime',
                     Dimensions: [
-                        { Name: 'UserId', Value: userId }
+                        { Name: 'Photo', Value: userId }
                     ],
                     Unit: 'Milliseconds',
                     Value: duration,
@@ -80,7 +80,7 @@ const getProfilePictureService = async (userId) => {
                 {
                     MetricName: 'PhotoRetrieveTime',
                     Dimensions: [
-                        { Name: 'UserId', Value: userId }
+                        { Name: 'Photo', Value: userId }
                     ],
                     Unit: 'Milliseconds',
                     Value: duration,
@@ -119,7 +119,7 @@ const deleteProfilePictureService = async (userId) => {
                 {
                     MetricName: 'PhotoDeleteTime',
                     Dimensions: [
-                        { Name: 'UserId', Value: userId }
+                        { Name: 'Photo', Value: userId }
                     ],
                     Unit: 'Milliseconds',
                     Value: duration,
