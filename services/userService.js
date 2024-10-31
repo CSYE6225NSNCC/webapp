@@ -49,7 +49,7 @@ const createNewUser = async ({ email, password, first_name, last_name }) => {
             {
                 MetricName: 'UserCreationTime',
                 Dimensions: [
-                    { Name: 'Operation', Value: 'CreateUser' }
+                    { Name: 'User', Value: 'CreateUser' }
                 ],
                 Unit: 'Milliseconds',
                 Value: duration,
@@ -88,7 +88,7 @@ const updateUser = async (user, { first_name, last_name, password }) => {
             {
                 MetricName: 'UserUpdateTime',
                 Dimensions: [
-                    { Name: 'Operation', Value: 'UpdateUser' }
+                    { Name: 'User', Value: 'UpdateUser' }
                 ],
                 Unit: 'Milliseconds',
                 Value: duration,
@@ -121,7 +121,7 @@ const fetchUser = async (user) => {
             {
                 MetricName: 'UserFetchTime',
                 Dimensions: [
-                    { Name: 'Operation', Value: 'FetchUser' }
+                    { Name: 'User', Value: 'FetchUser' }
                 ],
                 Unit: 'Milliseconds',
                 Value: duration,
