@@ -6,6 +6,11 @@ const {
 
 const uploadProfilePicture = async (req, res) => {
     try {
+
+        if (Object.keys(req.query).length > 0) {
+            console.error('Bad request');
+            return res.status(400).send();  // Bad Request
+        }
         const userId = req.user.id; // Assuming user ID is available in req.user
         const photoFile = req.file; // Assuming you are using multer to handle file uploads
 
