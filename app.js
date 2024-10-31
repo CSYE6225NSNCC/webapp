@@ -20,6 +20,17 @@ app.use("/healthz",healthcheckRoutes);
 app.use("/v1/user",userRoutes);
 app.use("/v1/user/self/pic", photoRoutes);
 
+// Global error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err); // Log the error for debugging
+    if (err instanceof multer.MulterError) {
+        return res.status(400).json({ message: err.message }); // Handle multer-specific errors
+    }
+    if (err) {
+        return res.status(500).json({ message: "An unexpected error occurred." });
+    }
+    next(); // Pass the error to the next middleware if it's not handled
+});
 
 // Start the server
 const startServer = async () => {

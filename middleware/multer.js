@@ -15,10 +15,11 @@ const upload = multer({
         const mimetype = filetypes.test(file.mimetype);
         const extname = filetypes.test(file.originalname.split('.').pop().toLowerCase());
 
-        if (mimetype && extname) {
-            return cb(null, true);
+        if (!mimetype || !extname) {
+            return cb(new Error("File type not allowed. Only JPEG, PNG, and GIF files are allowed."));
         }
-        cb(new Error("File type not allowed. Only JPEG, PNG, and GIF files are allowed."));
+
+        cb(null, true); // Accept the file
     },
 });
 

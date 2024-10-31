@@ -5,7 +5,10 @@ const { uploadProfilePicture, getProfilePicture, deleteProfilePicture } = requir
 const {authenticateUser} = require("../authentication/basicAuth.js") ;
 const upload = require('../middleware/multer.js'); 
 
-router.post('/', authenticateUser, upload.single('profilePic'), uploadProfilePicture);
+// Route to upload a profile picture
+router.post('/', authenticateUser, upload.single('profilePic'), (req, res) => {
+    uploadProfilePicture(req, res);
+});
 
 router.head('/', (req, res) => {
     return res.status(405).send();  // Method Not Allowed for HEAD
