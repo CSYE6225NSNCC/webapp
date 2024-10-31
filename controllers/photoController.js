@@ -36,6 +36,10 @@ const uploadProfilePicture = async (req, res) => {
 
 const getProfilePicture = async (req, res) => {
     try {
+        if (req.headers['content-length'] > 0 || Object.keys(req.query).length > 0) {
+            console.error('Query parameters or body are not allowed.');
+            return res.status(400).json({ message: 'Query parameters or body are not allowed.' });
+        }
         const userId = req.user.id; // Assuming user ID is available in req.user
         const photo = await getProfilePictureService(userId);
 
@@ -60,6 +64,10 @@ const getProfilePicture = async (req, res) => {
 
 const deleteProfilePicture = async (req, res) => {
     try {
+        if (req.headers['content-length'] > 0 || Object.keys(req.query).length > 0) {
+            console.error('Query parameters or body are not allowed.');
+            return res.status(400).json({ message: 'Query parameters or body are not allowed.' });
+        }
         const userId = req.user.id; // Assuming user ID is available in req.user
         await deleteProfilePictureService(userId);
         console.log("Profile picture deleted successfully");
