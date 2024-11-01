@@ -68,10 +68,10 @@ variable "ssh_username" {
 //  type        = string
 //}
 
-//variable "demo_account_id" {
-//  description = "AWS account ID for demo purposes"
-//  type        = number
-//}
+variable "demo_account_id" {
+  description = "AWS account ID for demo purposes"
+  type        = number
+}
 
 source "amazon-ebs" "ubuntu" {
   region           = var.aws_region
@@ -96,7 +96,7 @@ source "amazon-ebs" "ubuntu" {
     delete_on_termination = true
     volume_type           = var.volume_type
   }
-  //  ami_users = ["${var.demo_account_id}"]
+    ami_users = ["${var.demo_account_id}"]
 }
 
 build {
