@@ -6,6 +6,10 @@ const {
     UserInputError
 } = require("../errors/userErrors.js");
 
+const sns = new AWS.SNS();
+const VerificationToken = require('../models/verificationModel.js');
+
+
 const cloudwatch = new AWS.CloudWatch();
 
 const createNewUser = async ({ email, password, first_name, last_name }) => {
@@ -40,6 +44,24 @@ const createNewUser = async ({ email, password, first_name, last_name }) => {
         account_created: new Date(),
         account_updated: new Date(),
     });
+
+    // Generate verification token
+    const tokenExpiration = new Date(Date.now() + 2 * 60 * 1000); // 2-minute expiration
+    const verificationToken = await VerificationToken.create({
+        user_id: newUser.id,
+        expires_at: tokenExpiration,
+    });
+
+    // Publish SNS message
+    const message = JSON.stringify({
+        email,
+        token: verificationToken.token,
+    });
+
+    await sns.publish({
+        Message: message,
+        TopicArn: process.env.VERIFICATION_TOPIC_ARN,
+    }).promise();
 
     const duration = Date.now() - start;
 
