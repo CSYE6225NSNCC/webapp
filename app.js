@@ -7,7 +7,7 @@ const logMetrics = require('./middleware/metricsLogger.js'); // Import the metri
 const multer = require('multer'); // Multer for handling file uploads
 
 const { connectDB, sequelize } = require("./dbconnect/connectDB.js");
-
+const verificationRoutes = require("./routes/verificationRoutes.js");
 
 const app = express();
 
@@ -21,6 +21,7 @@ const PORT = process.env.PORT || 3000;
 app.use("/healthz",healthcheckRoutes); 
 app.use("/v1/user",userRoutes);
 app.use("/v1/user/self/pic", photoRoutes);
+app.use("/v1/verify", verificationRoutes);
 
 // Global error handling middleware
 app.use((err, req, res, next) => {
