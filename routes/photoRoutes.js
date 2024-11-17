@@ -4,7 +4,7 @@ const router = express.Router();
 const { uploadProfilePicture, getProfilePicture, deleteProfilePicture } = require('../controllers/photoController.js');
 const {authenticateUser} = require("../authentication/basicAuth.js") ;
 const upload = require('../middleware/multer.js'); 
-const {ensureVerifiedUser} = require('../middlewares/ensureVerifiedUser.js');
+const {ensureVerifiedUser} = require('../middleware/isVerified.js');
 
 // Route to upload a profile picture
 router.post('/', authenticateUser,ensureVerifiedUser, upload.single('profilePic'), (req, res) => {
