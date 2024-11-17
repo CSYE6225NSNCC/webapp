@@ -47,17 +47,18 @@ const createNewUser = async ({ email, password, first_name, last_name }) => {
 
     // Generate verification token
     const tokenExpiration = new Date(Date.now() + 2 * 60 * 1000); // 2-minute expiration
+    console.log('tokenExpiration: ' + tokenExpiration);
     const verificationToken = await VerificationToken.create({
         user_id: newUser.id,
         expires_at: tokenExpiration,
     });
-
+    console.log('verification token created successfully');
     // Publish SNS message
     const message = JSON.stringify({
         email,
         token: verificationToken.token,
     });
-
+    console.log('message is: ' + message);
     await sns.publish({
         Message: message,
         TopicArn: process.env.VERIFICATION_TOPIC_ARN,
