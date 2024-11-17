@@ -42,7 +42,7 @@ const User = sequelize.define('User', {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
-    }   
+    }  
 }, {
     tableName: 'users', // Define table name explicitly
     timestamps: false,  // Disable auto-timestamps

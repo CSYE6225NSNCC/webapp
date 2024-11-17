@@ -3,10 +3,9 @@ const { sequelize } = require('../dbconnect/connectDB.js');
 
 const VerificationToken = sequelize.define('VerificationToken', {
     token: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
+        type: DataTypes.STRING, // Use STRING or TEXT for longer tokens
         allowNull: false,
+        primaryKey: true,
     },
     user_id: {
         type: DataTypes.UUID,

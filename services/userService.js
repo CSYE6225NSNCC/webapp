@@ -8,6 +8,7 @@ const {
 
 const sns = new AWS.SNS();
 const VerificationToken = require('../models/verificationModel.js');
+const crypto = require('crypto');
 
 
 const cloudwatch = new AWS.CloudWatch();
@@ -47,12 +48,16 @@ const createNewUser = async ({ email, password, first_name, last_name }) => {
 
     // Generate verification token
     const tokenExpiration = new Date(Date.now() + 2 * 60 * 1000); // 2-minute expiration
-    console.log('tokenExpiration: ' + tokenExpiration);
+    const tokenValue = crypto.randomBytes(32).toString('hex'); // Generate random token
+
     const verificationToken = await VerificationToken.create({
+        token: tokenValue,
         user_id: newUser.id,
         expires_at: tokenExpiration,
     });
-    console.log('verification token created successfully');
+
+    console.log('Verification token created:', verificationToken);
+
     // Publish SNS message
     const message = JSON.stringify({
         email,
