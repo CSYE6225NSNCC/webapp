@@ -85,7 +85,7 @@ jobs:
             -var "volume_size=${{ secrets.VOLUME_SIZE }}" \
             -var "volume_type=${{ secrets.VOLUME_TYPE }}" \
             -var "demo_account_id=${{ secrets.DEMO_ACCOUNT_ID }}" \
-            aws.pkr.hcl 2>&1 | tee output.txt
+            aws.pkr.hcl 2>&1 | tee packer_output.txt
 
           # Extract AMI ID directly here
           AMI_ID=$(grep -Eo 'ami-[a-z0-9]+' packer_output.txt | tail -n1)
