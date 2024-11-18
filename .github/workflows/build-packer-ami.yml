@@ -71,6 +71,7 @@ jobs:
 
       - name: Build Packer Image and Capture AMI ID
         run: |
+          # Run the Packer build command and capture the output
           AMI_OUTPUT=$(packer build \
             -var "aws_region=${{ secrets.AWS_REGION }}" \
             -var "aws_source_ami=${{ secrets.AWS_SOURCE_AMI }}" \
@@ -81,9 +82,23 @@ jobs:
             -var "volume_type=${{ secrets.VOLUME_TYPE }}" \
             -var "demo_account_id=${{ secrets.DEMO_ACCOUNT_ID }}" \
             aws.pkr.hcl)
+        
+          # Output the AMI details
           echo "$AMI_OUTPUT" | tee packer-output.log
+        
+          # Extract the AMI ID from the output
           AMI_ID=$(echo "$AMI_OUTPUT" | grep -oP 'ami-\w+')
+        
+          # Check if the AMI ID was found
+          if [ -z "$AMI_ID" ]; then
+            echo "Error: AMI ID not found in Packer output."
+            exit 1
+          fi
+        
+          # Save the AMI ID as an environment variable for use in subsequent steps
           echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
+        
+          # Output the captured AMI ID for logging purposes
           echo "Captured AMI_ID: $AMI_ID"          
                   
   deploy_demo:
