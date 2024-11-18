@@ -30,7 +30,6 @@ const verifyEmail = async (token) => {
   // Mark user as verified and delete the token
   user.is_verified = true;
   await user.save();
-  await verificationToken.destroy();
 
   response.success = true;
   response.message = "Email verified successfully.";
