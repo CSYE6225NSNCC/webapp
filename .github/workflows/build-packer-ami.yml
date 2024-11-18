@@ -123,7 +123,7 @@ jobs:
         run: |
           REFRESH_ID=$(aws autoscaling start-instance-refresh \
             --auto-scaling-group-name "${{ secrets.DEMO_AUTOSCALING_GROUP_NAME }}" \
-            --preferences '{"InstanceWarmup": 300, "MinHealthyPercentage": 100}' \
+            --preferences '{ "InstanceWarmup": 300, "MinHealthyPercentage": 100}' \
             --query "InstanceRefreshId" --output text)
           echo "REFRESH_ID=$REFRESH_ID" >> $GITHUB_ENV
 
