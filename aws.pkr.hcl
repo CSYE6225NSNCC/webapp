@@ -78,7 +78,7 @@ source "amazon-ebs" "ubuntu" {
   source_ami       = var.aws_source_ami // Replace with the official Ubuntu 24.04 AMI ID
   instance_type    = var.instance_type
   ssh_username     = var.ssh_username
-  ami_name         = var.ami_name-${timestamp()}
+  ami_name         = var.ami_name
   ssh_wait_timeout = "10m"
   ami_description  = "Custom Ubuntu 24.04 image with Java, Tomcat, and MySQL"
   tags = {
