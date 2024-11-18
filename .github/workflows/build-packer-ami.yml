@@ -94,6 +94,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.DEMO_AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.DEMO_AWS_REGION }}
 
+      - name: Validate AMI_ID
+        run: |
+          if [ -z "${{ env.AMI_ID }}" ]; then
+            echo "Error: AMI_ID is not set. Please check the Packer build step."
+            exit 1
+          else
+            echo "AMI_ID is set to ${{ env.AMI_ID }}"
+          fi
+
       - name: Create Launch Template Version
         run: |
          aws ec2 create-launch-template-version \
