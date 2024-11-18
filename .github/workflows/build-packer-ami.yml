@@ -152,7 +152,14 @@ jobs:
 
       - name: Start Instance Refresh
         run: |
-            echo "Starting Instance Refresh for ASG: ${{ secrets.ASG_NAME }}"
+
+          REFRESH_ID=$(aws autoscaling start-instance-refresh \
+            --auto-scaling-group-name "${{ secrets.DEMO_AUTOSCALING_GROUP_NAME }}" \
+            --preferences '{ "InstanceWarmup": 300, "MinHealthyPercentage": 100}' \
+            --query "InstanceRefreshId" --output text)
+          echo "REFRESH_ID=$REFRESH_ID" >> $GITHUB_ENV
+
+          echo "Starting Instance Refresh for ASG: ${{ secrets.ASG_NAME }}"
             REFRESH_ID=$(aws autoscaling start-instance-refresh \
               --auto-scaling-group-name ${{ secrets.ASG_NAME }} \
               --strategy Rolling \
@@ -167,7 +174,7 @@ jobs:
       
             echo "REFRESH_ID=${REFRESH_ID}" >> $GITHUB_ENV
       
-      
+   
 
       - name: Wait for Instance Refresh to Complete
         run: |
